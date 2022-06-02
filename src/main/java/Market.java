@@ -3,7 +3,7 @@ import java.util.List;
 
 public class Market {
 
-    private final int targetSalesCount = 5;
+    private final int targetSalesCount = 10;
     private Dealer dealer = new Dealer(this);
     private List<Car> cars = new ArrayList<>(targetSalesCount);
 
