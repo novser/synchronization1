@@ -16,7 +16,7 @@ public class Dealer {
                 Thread.sleep(productionCarTimeout);
                 market.getCars().add(new Car());
                 System.out.println("Производитель " + producerName + " выпустил и доставил новое авто");
-                notify();
+                notifyAll();
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());

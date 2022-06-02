@@ -3,9 +3,9 @@ public class Main {
 
         final Market market = new Market();
 
-        for (int i = 0; i < market.getTargetSalesCount(); i++) {
-            new Thread(null, market::sellCar, "Покупатель " + (i + 1)).start();
-        }
+        new Thread(null, market::sellCar, "Покупатель 1").start();
+        new Thread(null, market::sellCar, "Покупатель 2").start();
+        new Thread(null, market::sellCar, "Покупатель 3").start();
 
         new Thread(null, market::deliverCar, "Honda").start();
     }
