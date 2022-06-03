@@ -15,8 +15,8 @@ public class Market {
         return targetSalesCount;
     }
 
-    public Car sellCar() {
-       return dealer.sellCar();
+    public void sellCar() {
+       dealer.sellCar();
     }
 
     public void deliverCar () {
