@@ -1,7 +1,6 @@
 public class Dealer {
 
     private Market market;
-    private final int productionCarTimeout = 3000;
     private final int sellingTimeout = 1000;
 
     public Dealer(Market market) {
@@ -11,13 +10,12 @@ public class Dealer {
     public synchronized void produceCars() {
         String producerName = Thread.currentThread().getName();
         try {
-            for (int i = 0; i < market.getTargetSalesCount(); i++) {
+
                 System.out.println("Производитель " + producerName + " начинает делать автомобиль");
-                Thread.sleep(productionCarTimeout);
                 market.getCars().add(new Car());
                 System.out.println("Производитель " + producerName + " выпустил и доставил новое авто");
                 notifyAll();
-            }
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
