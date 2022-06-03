@@ -3,6 +3,8 @@ public class Dealer {
     private Market market;
     private final int sellingTimeout = 1000;
     private final int productionCarTimeout = 5000;
+    private final int consumerWaitingTimeout = 1000;
+    private int soldCars;
 
     public Dealer(Market market) {
         this.market = market;
@@ -16,7 +18,7 @@ public class Dealer {
                     System.out.println("Производитель " + producerName + " начинает делать автомобиль");
                     market.getCars().add(new Car());
                     System.out.println("Производитель " + producerName + " выпустил и доставил новое авто");
-                    notifyAll();
+                    notify();
                 }
                 Thread.sleep(productionCarTimeout);
             }
@@ -27,19 +29,29 @@ public class Dealer {
 
     public void sellCar() {
         String consumerName = Thread.currentThread().getName();
-        synchronized (this) {
-            try {
-                System.out.println(consumerName + " зашел в автосалон");
-                while (market.getCars().size() == 0) {
-                    System.out.println("Машин нет. " + consumerName + " ждет");
-                    wait();
+        while (true) {
+                try {
+                    synchronized (this) {
+                        System.out.println(consumerName + " зашел в автосалон");
+                        while (market.getCars().size() == 0) {
+                            if (soldCars >= market.getTargetSalesCount()) {
+                                notifyAll();
+                                System.out.println("Авто закончились, " + consumerName + " вышел из автосалона");
+                                return;
+                            }
+                            System.out.println("Машин нет. " + consumerName + " ждет");
+                            wait();
+                        }
+                        Thread.sleep(sellingTimeout);
+                        System.out.println(consumerName + " доволен покупкой");
+                        market.getCars().remove(0);
+                        soldCars++;
+                    }
+                    Thread.sleep(consumerWaitingTimeout);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
                 }
-                Thread.sleep(sellingTimeout);
-                System.out.println(consumerName + " доволен покупкой");
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
             }
-            market.getCars().remove(0);
         }
     }
-}
+
